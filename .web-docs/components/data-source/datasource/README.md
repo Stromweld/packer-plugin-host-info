@@ -24,7 +24,7 @@ the host system information when executed.
 
 The `host-info` data source exports the following attributes:
 
-- `os` (string) - The host operating system name (e.g., `darwin`, `linux`, `windows`).
+- `os_type` (string) - The host operating system name (e.g., `darwin`, `linux`, `windows`).
 
 - `version` (string) - The operating system version or release number.
 
@@ -48,7 +48,7 @@ data "host-info" "current" {
 
 locals {
   # Use detected values to create dynamic image names
-  image_name = "my-app-${data.host-info.current.os}-${data.host-info.current.architecture}"
+  image_name = "my-app-${data.host-info.current.os_type}-${data.host-info.current.architecture}"
 }
 
 source "docker" "example" {
@@ -61,7 +61,7 @@ build {
   
   provisioner "shell" {
     inline = [
-      "echo 'Building on ${data.host-info.current.os}'",
+      "echo 'Building on ${data.host-info.current.os_type}'",
       "echo 'Host architecture: ${data.host-info.current.architecture}'",
       "echo 'Platform: ${data.host-info.current.platform}'"
     ]
@@ -90,13 +90,13 @@ build {
   
   # Only run on macOS
   provisioner "shell-local" {
-    only   = data.host-info.current.os == "darwin" ? ["null.example"] : []
+    only   = data.host-info.current.os_type == "darwin" ? ["null.example"] : []
     inline = ["echo 'Running on macOS'"]
   }
   
   # Only run on Linux
   provisioner "shell-local" {
-    only   = data.host-info.current.os == "linux" ? ["null.example"] : []
+    only   = data.host-info.current.os_type == "linux" ? ["null.example"] : []
     inline = ["echo 'Running on Linux'"]
   }
 }
@@ -125,7 +125,7 @@ locals {
     }
   }
   
-  current_config = local.builder_config[data.host-info.current.os]
+  current_config = local.builder_config[data.host-info.current.os_type]
 }
 
 source "virtualbox-iso" "example" {

@@ -18,8 +18,8 @@ Add the plugin to your Packer template:
 ```hcl
 packer {
   required_plugins {
-    hostinfo = {
-      version = ">=v0.1.0"
+    host-info = {
+      version = ">= v0.1.0"
       source  = "github.com/Stromweld/host-info"
     }
   }

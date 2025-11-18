@@ -57,4 +57,3 @@ func (*FlatDatasourceOutput) HCL2Spec() map[string]hcldec.Spec {
 	}
 	return s
 }
-

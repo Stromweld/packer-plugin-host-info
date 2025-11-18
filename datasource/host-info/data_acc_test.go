@@ -6,7 +6,7 @@ package hostinfo
 import (
 	_ "embed"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"os/exec"
 	"regexp"
@@ -18,7 +18,7 @@ import (
 //go:embed test-fixtures/template.pkr.hcl
 var testDatasourceHCL2Basic string
 
-// Run with: PACKER_ACC=1 go test -count 1 -v ./datasource/hostinfo/data_acc_test.go  -timeout=120m
+// Run with: PACKER_ACC=1 go test -count 1 -v ./datasource/host-info/data_acc_test.go  -timeout=120m
 func TestAccHostInfoDatasource(t *testing.T) {
 	testCase := &acctest.PluginTestCase{
 		Name: "hostinfo_datasource_basic_test",
@@ -43,7 +43,7 @@ func TestAccHostInfoDatasource(t *testing.T) {
 			}
 			defer logs.Close()
 
-			logsBytes, err := ioutil.ReadAll(logs)
+			logsBytes, err := io.ReadAll(logs)
 			if err != nil {
 				return fmt.Errorf("Unable to read %s", logfile)
 			}

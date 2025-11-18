@@ -12,8 +12,8 @@ import (
 	"github.com/hashicorp/hcl/v2/hcldec"
 	"github.com/hashicorp/packer-plugin-sdk/hcl2helper"
 	"github.com/hashicorp/packer-plugin-sdk/template/config"
-	"github.com/zclconf/go-cty/cty"
 	"github.com/shirou/gopsutil/v3/host"
+	"github.com/zclconf/go-cty/cty"
 )
 
 type Config struct {

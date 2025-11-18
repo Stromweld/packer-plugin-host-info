@@ -1,6 +1,6 @@
-Type: `os_type`
+Type: `host-info`
 
-The os_type data source automatically detects the host operating system, version,
+The host-info data source automatically detects the host operating system, version,
 and CPU architecture where Packer is running. This is useful for making
 OS-specific build decisions, tagging images with build environment information,
 or conditional logic based on the build host.
@@ -12,7 +12,7 @@ system information when executed.
 
 ## Output
 
-- `os` (string) - The host operating system name (e.g., `darwin`, `linux`, `windows`)
+- `os_type` (string) - The host operating system name (e.g., `darwin`, `linux`, `windows`)
 - `version` (string) - The OS version/release number
 - `architecture` (string) - The CPU architecture (e.g., `amd64`, `arm64`, `386`)
 - `platform` (string) - Detailed platform information (e.g., `darwin`, `ubuntu`, `rhel`)

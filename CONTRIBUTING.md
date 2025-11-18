@@ -81,7 +81,7 @@ make testacc
 Or manually:
 
 ```bash
-PACKER_ACC=1 go test -count 1 -v ./datasource/hostinfo -timeout=120m
+PACKER_ACC=1 go test -count 1 -v ./datasource/host-info -timeout=120m
 ```
 
 ### Test Coverage
@@ -102,7 +102,7 @@ make generate
 Or manually:
 
 ```bash
-cd datasource/hostinfo
+cd datasource/host-info
 go generate
 ```
 
@@ -110,17 +110,17 @@ go generate
 
 ### Adding New Fields to Output
 
-1. Update the `DatasourceOutput` struct in `datasource/hostinfo/data.go`
+1. Update the `DatasourceOutput` struct in `datasource/host-info/data.go`
 2. Update the `Execute()` method to populate the new field
 3. Run `make generate` to update generated files
-4. Update tests in `datasource/hostinfo/data_test.go`
+4. Update tests in `datasource/host-info/data_test.go`
 5. Update documentation in `.web-docs/`
 
 Example:
 
 ```go
 type DatasourceOutput struct {
-    OS           string `mapstructure:"os"`
+    OS           string `mapstructure:"os_type"`
     Version      string `mapstructure:"version"`
     Architecture string `mapstructure:"architecture"`
     Platform     string `mapstructure:"platform"`

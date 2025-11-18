@@ -15,7 +15,7 @@ To install this plugin, copy and paste this code into your Packer configuration,
 ```hcl
 packer {
   required_plugins {
-    hostinfo = {
+    host-info = {
       source  = "github.com/Stromweld/host-info"
       version = ">=0.1.0"
     }

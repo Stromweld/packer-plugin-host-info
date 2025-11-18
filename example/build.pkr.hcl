@@ -3,7 +3,7 @@
 
 packer {
   required_plugins {
-    hostinfo = {
+    host-info = {
       version = ">=v0.1.0"
       source  = "github.com/Stromweld/host-info"
     }

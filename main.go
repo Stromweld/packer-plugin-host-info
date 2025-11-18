@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	hostInfoData "github.com/Stromweld/packer-plugin-host-info/datasource/hostinfo"
+	hostInfoData "github.com/Stromweld/packer-plugin-host-info/datasource/host-info"
 	hostInfoVersion "github.com/Stromweld/packer-plugin-host-info/version"
 
 	"github.com/hashicorp/packer-plugin-sdk/plugin"
@@ -15,7 +15,7 @@ import (
 
 func main() {
 	pps := plugin.NewSet()
-	pps.RegisterDatasource("host-info", new(hostInfoData.Datasource))
+	pps.RegisterDatasource(plugin.DEFAULT_NAME, new(hostInfoData.Datasource))
 	pps.SetVersion(hostInfoVersion.PluginVersion)
 	err := pps.Run()
 	if err != nil {
