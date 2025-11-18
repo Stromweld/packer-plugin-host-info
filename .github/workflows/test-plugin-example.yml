@@ -22,26 +22,26 @@ jobs:
     name: init and build example
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@v5
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: ${{ env.PACKER_VERSION }}
 
       - name: Init
-        uses: hashicorp/packer-github-actions@master
-        with:
-          working_directory: ${{ github.event.inputs.folder }}
-          command: init
+        id: init
+        run: packer init ${{ github.event.inputs.folder }}
 
       - name: Validate
-        uses: hashicorp/packer-github-actions@master
-        with:
-          working_directory: ${{ github.event.inputs.folder }}
-          command: validate
+        id: validate
+        run: packer validate ${{ github.event.inputs.folder }}
         env:
           PACKER_LOG: ${{ github.event.inputs.logs }}
 
       - name: Build
-        uses: hashicorp/packer-github-actions@master
-        with:
-          working_directory: ${{ github.event.inputs.folder }}
-          command: build
+        id: build
+        run: packer build ${{ github.event.inputs.folder }}
         env:
           PACKER_LOG: ${{ github.event.inputs.logs }}
