@@ -1,23 +1,23 @@
-<!--
-  Include a short overview about the plugin.
+# Packer Plugin Host Info
 
-  This document is a great location for creating a table of contents for each
-  of the components the plugin may provide. This document should load automatically
-  when navigating to the docs directory for a plugin.
+The Host Info plugin provides a data source that automatically detects information about the host operating system where Packer is running.
 
--->
+## Components
 
-### Installation
+### Data Sources
+
+- [info](datasources/info.mdx) - Detects host operating system, version, architecture, platform, and OS family
+
+## Installation
 
 To install this plugin, copy and paste this code into your Packer configuration, then run [`packer init`](https://www.packer.io/docs/commands/init).
 
 ```hcl
 packer {
   required_plugins {
-    name = {
-      # source represents the GitHub URI to the plugin repository without the `packer-plugin-` prefix.
-      source  = "github.com/organization/name"
-      version = ">=0.0.1"
+    hostinfo = {
+      source  = "github.com/Stromweld/host-info"
+      version = ">=0.1.0"
     }
   }
 }
@@ -26,27 +26,22 @@ packer {
 Alternatively, you can use `packer plugins install` to manage installation of this plugin.
 
 ```sh
-$ packer plugins install github.com/organization/plugin-name
+$ packer plugins install github.com/Stromweld/host-info
+```
+
+## Usage
+
+```hcl
+data "host-info" "current" {
+  # No configuration required
+}
+
+locals {
+  build_platform = "${data.host-info.current.os}-${data.host-info.current.architecture}"
+}
 ```
 
 ### Components
-
-The Scaffolding plugin is intended as a starting point for creating Packer plugins
-
-#### Builders
-
-- [builder](/packer/integrations/hashicorp/scaffolding/latest/components/builder/builder-name) - The scaffolding builder is used to create endless Packer
-  plugins using a consistent plugin structure.
-
-#### Provisioners
-
-- [provisioner](/packer/integrations/hashicorp/scaffolding/latest/components/provisioner/provisioner-name) - The scaffolding provisioner is used to provisioner
-  Packer builds.
-
-#### Post-processors
-
-- [post-processor](/packer/integrations/hashicorp/scaffolding/latest/components/post-processor/postprocessor-name) - The scaffolding post-processor is used to
-  export scaffolding builds.
 
 #### Data Sources
 

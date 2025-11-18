@@ -1,15 +1,53 @@
-# Packer Plugin Scaffolding
+# Packer Plugin Host Info
 
-This repository is a template for a Packer multi-component plugin. It is intended as a starting point for creating Packer plugins, containing:
-- A builder ([builder/scaffolding](builder/scaffolding))
-- A provisioner ([provisioner/scaffolding](provisioner/scaffolding))
-- A post-processor ([post-processor/scaffolding](post-processor/scaffolding))
-- A data source ([datasource/scaffolding](datasource/scaffolding))
-- Docs ([docs](docs))
-- A working example ([example](example))
+A Packer plugin that provides a data source to detect the host operating system, version, and CPU architecture where Packer is running.
 
-These folders contain boilerplate code that you will need to edit to create your own Packer multi-component plugin.
-A full guide to creating Packer plugins can be found at [Extending Packer](https://www.packer.io/docs/plugins/creation).
+## Features
+
+This plugin provides a data source that automatically detects:
+- **OS**: The operating system name (e.g., `darwin`, `linux`, `windows`)
+- **Version**: The OS version/release number
+- **Architecture**: The CPU architecture (e.g., `amd64`, `arm64`)
+- **Platform**: Detailed platform information
+- **Family**: OS family classification
+
+## Usage
+
+Add the plugin to your Packer template:
+
+```hcl
+packer {
+  required_plugins {
+    hostinfo = {
+      version = ">=v0.1.0"
+      source  = "github.com/Stromweld/host-info"
+    }
+  }
+}
+
+data "host-info" "current" {
+  # No configuration required
+}
+
+locals {
+  # Use the detected values in your build
+  image_name = "my-image-${data.host-info.current.os_type}-${data.host-info.current.architecture}"
+}
+```
+
+## Data Source Output
+
+The `host-info` data source provides the following output attributes:
+
+- `os_type` (string): The host operating system (e.g., `darwin`, `linux`, `windows`)
+- `version` (string): The OS version/release
+- `architecture` (string): The CPU architecture (e.g., `amd64`, `arm64`, `386`)
+- `platform` (string): Platform information (e.g., `darwin`, `ubuntu`, `rhel`)
+- `family` (string): OS family (e.g., `standalone`, `debian`, `rhel`)
+
+## Example
+
+See the [example](example) directory for a complete working example.
 
 In this repository you will also find a pre-defined GitHub Action configuration for the release workflow
 (`.goreleaser.yml` and `.github/workflows/release.yml`). The release workflow configuration makes sure the GitHub
@@ -29,21 +67,25 @@ Here's a non exaustive list of Packer plugins that you can checkout:
 
 Looking at their code will give you good examples.
 
-## Build from source
+## Installation
 
-1. Clone this GitHub repository locally.
+### From Source
 
-2. Run this command from the root directory: 
-```shell 
-go build -ldflags="-X github.com/hashicorp/packer-plugin-scaffolding/version.VersionPrerelease=dev" -o packer-plugin-scaffolding
-```
+1. Clone this GitHub repository locally:
+   ```shell
+   git clone https://github.com/Stromweld/packer-plugin-host-info
+   cd packer-plugin-host-info
+   ```
 
-3. After you successfully compile, the `packer-plugin-scaffolding` plugin binary file is in the root directory. 
+2. Build the plugin binary:
+   ```shell 
+   go build -ldflags="-X github.com/Stromweld/packer-plugin-host-info/version.VersionPrerelease=dev" -o packer-plugin-host-info
+   ```
 
-4. To install the compiled plugin, run the following command 
-```shell
-packer plugins install --path packer-plugin-scaffolding github.com/hashicorp/scaffolding
-```
+3. Install the compiled plugin:
+   ```shell
+   packer plugins install --path packer-plugin-host-info github.com/Stromweld/host-info
+   ```
 
 ### Build on *nix systems
 Unix like systems with the make, sed, and grep commands installed can use the `make dev` to execute the build from source steps. 
@@ -55,8 +97,8 @@ If you would prefer to script the building process you can use the following as 
 ```powershell
 $MODULE_NAME = (Get-Content go.mod | Where-Object { $_ -match "^module"  }) -replace 'module ',''
 $FQN = $MODULE_NAME -replace 'packer-plugin-',''
-go build -ldflags="-X $MODULE_NAME/version.VersionPrerelease=dev" -o packer-plugin-scaffolding.exe
-packer plugins install --path packer-plugin-scaffolding.exe $FQN
+go build -ldflags="-X $MODULE_NAME/version.VersionPrerelease=dev" -o packer-plugin-host-info.exe
+packer plugins install --path packer-plugin-host-info.exe $FQN
 ```
 
 ## Running Acceptance Tests
@@ -87,4 +129,4 @@ plugin as a Packer integration refer to the [Developing Plugins](https://develop
 -	[Go](https://golang.org/doc/install) >= 1.20
 
 ## Packer Compatibility
-This scaffolding template is compatible with Packer >= v1.10.2
+This plugin is compatible with Packer >= v1.10.2

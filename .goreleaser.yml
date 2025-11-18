@@ -34,7 +34,6 @@ builds:
       - '-s -w -X {{ .ModulePath }}/version.Version={{.Version}} -X {{ .ModulePath }}/version.VersionPrerelease= '
     goos:
       - netbsd
-      - solaris
       - openbsd
       - freebsd
       - windows

@@ -7,6 +7,10 @@
 
 -->
 
+The Host Info plugin provides a data source for detecting the host operating system, version, 
+and CPU architecture where Packer is running. This is useful for creating dynamic build 
+configurations that adapt to the build environment.
+
 ### Installation
 
 To install this plugin, copy and paste this code into your Packer configuration, then run [`packer init`](https://www.packer.io/docs/commands/init).
@@ -14,10 +18,9 @@ To install this plugin, copy and paste this code into your Packer configuration,
 ```hcl
 packer {
   required_plugins {
-    name = {
-      # source represents the GitHub URI to the plugin repository without the `packer-plugin-` prefix.
-      source  = "github.com/organization/name"
-      version = ">=0.0.1"
+    hostinfo = {
+      source  = "github.com/Stromweld/host-info"
+      version = "~> 0.1"
     }
   }
 }
@@ -26,30 +29,14 @@ packer {
 Alternatively, you can use `packer plugins install` to manage installation of this plugin.
 
 ```sh
-$ packer plugins install github.com/organization/plugin-name
+$ packer plugins install github.com/Stromweld/host-info
 ```
 
 ### Components
 
-The Scaffolding plugin is intended as a starting point for creating Packer plugins
-
-#### Builders
-
-- [builder](/packer/integrations/hashicorp/scaffolding/latest/components/builder/builder-name) - The scaffolding builder is used to create endless Packer
-  plugins using a consistent plugin structure.
-
-#### Provisioners
-
-- [provisioner](/packer/integrations/hashicorp/scaffolding/latest/components/provisioner/provisioner-name) - The scaffolding provisioner is used to provisioner
-  Packer builds.
-
-#### Post-processors
-
-- [post-processor](/packer/integrations/hashicorp/scaffolding/latest/components/post-processor/postprocessor-name) - The scaffolding post-processor is used to
-  export scaffolding builds.
+The Host Info plugin provides the following component:
 
 #### Data Sources
 
-- [data source](/packer/integrations/hashicorp/scaffolding/latest/components/datasource/datasource-name) - The scaffolding data source is used to
-  export scaffolding data.
+- [host-info](/packer/integrations/stromweld/host-info/latest/components/data-source/datasource) - Automatically detects the host operating system, version, CPU architecture, platform, and OS family where Packer is running.
 

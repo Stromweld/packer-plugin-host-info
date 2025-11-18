@@ -1,43 +1,56 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
+# Copyright (c) 2025 Corey Hemminger
+# SPDX-License-Identifier: Apache-2.0
 
 packer {
   required_plugins {
-    scaffolding = {
+    hostinfo = {
       version = ">=v0.1.0"
-      source  = "github.com/hashicorp/scaffolding"
+      source  = "github.com/Stromweld/host-info"
+    }
+    docker = {
+      version = ">=v1.0.0"
+      source  = "github.com/hashicorp/docker"
     }
   }
 }
 
-source "scaffolding-my-builder" "foo-example" {
-  mock = local.foo
-}
+# This example demonstrates using the host-info data source to:
+# 1. Tag Docker images with build environment metadata
+# 2. Make OS-specific decisions in your builds
+# 3. Create platform-aware artifact naming
 
-source "scaffolding-my-builder" "bar-example" {
-  mock = local.bar
+source "docker" "example" {
+  image  = "ubuntu:22.04"
+  commit = true
+  changes = [
+    "LABEL builder.os=${local.host_os}",
+    "LABEL builder.version=${local.host_version}",
+    "LABEL builder.architecture=${local.host_arch}",
+    "LABEL builder.platform=${local.host_platform}",
+    "LABEL builder.timestamp=${local.build_timestamp}",
+  ]
 }
 
 build {
-  sources = [
-    "source.scaffolding-my-builder.foo-example",
-  ]
+  name = "hostos-example"
+  sources = ["source.docker.example"]
 
-  source "source.scaffolding-my-builder.bar-example" {
-    name = "bar"
+  provisioner "shell" {
+    inline = [
+      "echo 'Building on: ${local.host_os} ${local.host_version}'",
+      "echo 'Architecture: ${local.host_arch}'",
+      "echo 'Platform: ${local.host_platform}'",
+      "echo 'Family: ${local.host_family}'",
+      "echo 'OS-Arch Combo: ${local.os_arch_combo}'",
+    ]
   }
 
-  provisioner "scaffolding-my-provisioner" {
-    only = ["scaffolding-my-builder.foo-example"]
-    mock = "foo: ${local.foo}"
-  }
-
-  provisioner "scaffolding-my-provisioner" {
-    only = ["scaffolding-my-builder.bar"]
-    mock = "bar: ${local.bar}"
-  }
-
-  post-processor "scaffolding-my-post-processor" {
-    mock = "post-processor mock-config"
+  post-processor "docker-tag" {
+    repository = "example/hostos-demo"
+    tags = [
+      "latest",
+      "${local.os_arch_combo}",
+      "${local.build_timestamp}",
+    ]
   }
 }

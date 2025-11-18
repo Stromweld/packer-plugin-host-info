@@ -1,4 +1,4 @@
-NAME=scaffolding
+NAME=host-info
 BINARY=packer-plugin-${NAME}
 
 COUNT?=1
