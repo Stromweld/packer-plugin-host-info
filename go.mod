@@ -73,3 +73,5 @@ require (
 	golang.org/x/tools v0.39.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 )
+
+replace github.com/zclconf/go-cty => github.com/nywilken/go-cty v1.13.3 // added by packer-sdc fix as noted in github.com/hashicorp/packer-plugin-sdk/issues/187
