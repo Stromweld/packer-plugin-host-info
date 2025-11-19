@@ -13,6 +13,17 @@ on:
         default: 'main'
         required: false
 jobs:
+  get-go-version:
+    runs-on: ubuntu-latest
+    outputs:
+      go-version: ${{ steps.get-go-version.outputs.go-version }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: 'Determine Go version'
+        id: get-go-version
+        run: |
+          echo "Found Go $(cat .go-version)"
+          echo "go-version=$(cat .go-version)" >> $GITHUB_OUTPUT
   notify-release:
     runs-on: ubuntu-latest
     steps:
@@ -22,6 +33,8 @@ jobs:
           ref: ${{ github.event.inputs.branch }}
       # Ensure that Docs are Compiled
       - uses: actions/setup-go@v6
+        with:
+          go-version: ${{ needs.get-go-version.outputs.go-version }}
       - shell: bash
         run: make generate
       - shell: bash
