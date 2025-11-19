@@ -36,7 +36,8 @@ jobs:
         with:
           ref: ${{ github.ref }}
       # Ensure that Docs are Compiled
-      - uses: actions/setup-go@v6
+      - name: Set up Go
+        uses: actions/setup-go@v6
         with:
           go-version: ${{ needs.get-go-version.outputs.go-version }}
       - shell: bash
