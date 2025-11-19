@@ -25,6 +25,8 @@ jobs:
           echo "Found Go $(cat .go-version)"
           echo "go-version=$(cat .go-version)" >> $GITHUB_OUTPUT
   notify-release:
+    needs:
+      - get-go-version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repo
